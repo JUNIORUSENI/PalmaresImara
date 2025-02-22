@@ -1,0 +1,55 @@
+{% if search_done %}
+    {% if resultats %}
+        <table class="resultats-table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Post-Nom</th>
+                    <th>Prénom</th>
+                    <th>Pourcentage</th>
+                    <th>Année Scolaire</th>
+                    <th>Section</th>
+                    <th>Classe</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in resultats %}
+                <tr>
+                    <td>{{ resultat.eleve.nom|default_if_none:"-" }}</td>
+                    <td>{{ resultat.eleve.post_nom|default_if_none:"-" }}</td>
+                    <td>{{ resultat.eleve.prenom|default_if_none:"-" }}</td>
+                    <td>
+                        {% if resultat.pourcentage %}
+                            {{ resultat.pourcentage }}
+                        {% endif %}
+                    </td>
+                    <td>{{ resultat.annee_scolaire.annee_scolaire|default_if_none:"-" }}</td>
+                    <td>{{ resultat.section.nom_section|default_if_none:"-" }}</td>
+                    <td>{{ resultat.classe.nom_classe|default_if_none:"-" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            {% if resultats.has_previous %}
+                <a href="#" class="page-link previous" data-page="{{ resultats.previous_page_number }}">
+                    Précédent
+                </a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ resultats.number }} sur {{ resultats.paginator.num_pages }}.
+            </span>
+
+            {% if resultats.has_next %}
+                <a href="#" class="page-link next" data-page="{{ resultats.next_page_number }}">
+                    Suivant
+                </a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Aucun résultat trouvé.</p>
+    {% endif %}
+{% else %}
+{% endif %}

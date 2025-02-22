@@ -1,0 +1,21 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<p>Vous avez {{ errors|length }} erreur(s) lors de l'import :</p>
+
+<table style="border-collapse: collapse;">
+  <tr><th style="border:1px solid #ccc; padding: 5px;">Erreur</th></tr>
+  {% for err in errors %}
+    <tr>
+      <td style="border:1px solid #ccc; padding: 5px;">{{ err }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<br>
+<a class="button" href="{% url 'admin:download_errors' %}">Télécharger les erreurs en CSV</a>
+&nbsp;&nbsp;
+<a class="button" href="{% url 'admin:palmares_resultat_changelist' %}">Retour à la liste</a>
+{% endblock %}

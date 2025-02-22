@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="{% static 'palmares/css/login.css' %}">    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    >
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    >
+
+</head>
+<body>
+    <div class="login-container">
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            <h2>Connexion</h2>
+
+            <div class="input-container">
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" placeholder="Entrez votre nom d'utilisateur" required>
+            </div>
+
+            <div class="input-container">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Entrez votre mot de passe" required>
+            </div>
+
+            {% for error in form.non_field_errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+
+            <button type="submit" class="btn">Connexion</button>
+        </form>
+    </div>
+</body>
+</html>

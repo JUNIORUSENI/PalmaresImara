@@ -1,0 +1,136 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f7f8fc;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    min-height: 100vh;
+    color: #333;
+}
+
+.login-container {
+    background-color: #fff;
+    padding: 80px 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    width: 20%;
+    max-width: 450px;
+    text-align: center;
+    box-sizing: border-box;
+    margin: 0 auto;
+    position: relative;
+}
+
+.login-container h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.input-container {
+    position: relative;
+    width: 80%; 
+    margin: 0 auto 20px auto;
+}
+
+.input-container i {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #555;
+    font-size: 18px;
+}
+
+.input-container input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1.5px solid #555;
+    border-radius: 12px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    color: #333;
+    box-sizing: border-box;
+    height: 45px;
+    transition: border-color 0.3s ease;
+}
+
+.input-container input::placeholder {
+    color: #555;
+}
+
+.input-container input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.login-container .btn {
+    width: 80%; 
+    padding: 12px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-container .btn:hover {
+    background-color: #2980b9;
+    transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        width: 70%;
+        padding: 60px 20px;
+    }
+    .login-container h2 {
+        font-size: 1.8rem;
+    }
+    .input-container {
+        width: 90%;
+    }
+    .login-container .btn {
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        margin: 10px;
+        padding: 40px 15px;
+        width: 90%;
+    }
+    .login-container h2 {
+        font-size: 1.6rem;
+    }
+    .input-container {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .input-container input {
+        font-size: 13px;
+        padding: 10px 10px 10px 35px;
+        height: 40px;
+    }
+    .login-container .btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 15px;
+    }
+}

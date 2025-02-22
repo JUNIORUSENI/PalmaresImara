@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recherche</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'palmares/css/recherche.css' %}">    
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+  <div class="header">
+    <div class="logo-title">
+      <img src="{% static 'palmares/images/logo.png' %}" alt="Logo">
+      <h1>PALMARÈS IMARA SAINT FRANCOIS DE SALES</h1>
+    </div>
+    <div class="user-info">
+      <i class="fas fa-user-circle"></i>
+      <span>{{ user.username }}</span>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="inner-container">
+
+      <div class="menu-recherche">
+        <h2>Formulaire de recherche</h2>
+        <form id="search-form" method="get">
+          <label for="nom">Nom :</label>
+          <input type="text" id="nom" name="nom" placeholder="Entrez le nom">
+
+          <label for="post_nom">Post-Nom :</label>
+          <input type="text" id="post_nom" name="post_nom" placeholder="Entrez le post-nom">
+
+          <label for="prenom">Prénom :</label>
+          <input type="text" id="prenom" name="prenom" placeholder="Entrez le prénom">
+
+          <label for="annee_scolaire">Année Scolaire :</label>
+          <select id="annee_scolaire" name="annee_scolaire">
+            <option value="">Sélectionner une année</option>
+            {% for annee in annees %}
+              <option value="{{ annee.annee_scolaire }}">{{ annee.annee_scolaire }}</option>
+            {% endfor %}
+          </select>
+
+          <label for="section">Section :</label>
+          <select id="section" name="section" disabled>
+            <option value="">Sélectionner une section</option>
+          </select>
+
+          <label for="classe">Classe :</label>
+          <select id="classe" name="classe" disabled>
+            <option value="">Sélectionner une classe</option>
+          </select>
+
+          <div class="buttons-container">
+            <button type="button" class="btn btn-search" id="search-button">Rechercher</button>
+            <button type="button" class="btn btn-reset" id="reset-button">Annuler</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="results-container">
+        {% include 'palmares/resultats_partial.html' %}
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    const sectionSelect = $('#section');
+    const classeSelect = $('#classe');
+    const anneeSelect = $('#annee_scolaire');
+    const resultsContainer = $('#results-container');
+    const loader = $('#loader');
+
+    const savedSearch = localStorage.getItem('searchData');
+    if (savedSearch) {
+      const data = JSON.parse(savedSearch);
+      $('#nom').val(data.nom || '');
+      $('#post_nom').val(data.post_nom || '');
+      $('#prenom').val(data.prenom || '');
+      $('#annee_scolaire').val(data.annee_scolaire || '');
+    }
+
+    function showLoader() { loader.show(); }
+    function hideLoader() { loader.hide(); }
+
+    anneeSelect.change(function() {
+      const annee = $(this).val();
+      sectionSelect.prop('disabled', !annee)
+                   .empty()
+                   .append('<option value="">Sélectionner une section</option>');
+      classeSelect.prop('disabled', true)
+                  .empty()
+                  .append('<option value="">Sélectionner une classe</option>');
+
+      if (annee) {
+        $.get("{% url 'charger_sections_classes' %}", { annee_scolaire: annee })
+          .done(data => {
+            data.sections.forEach(section => {
+              sectionSelect.append(
+                `<option value="${section.nom_section}">${section.nom_section}</option>`
+              );
+            });
+
+            const savedData = JSON.parse(localStorage.getItem('searchData') || '{}');
+            if (savedData.section) {
+              sectionSelect.val(savedData.section);
+              sectionSelect.trigger('change'); 
+            }
+          })
+          .fail(() => alert("Erreur lors du chargement des sections."));
+      }
+    });
+
+    sectionSelect.change(function() {
+      const section = $(this).val();
+      const annee = anneeSelect.val();
+
+      classeSelect.prop('disabled', !section)
+                  .empty()
+                  .append('<option value="">Sélectionner une classe</option>');
+
+      if (section) {
+        $.get("{% url 'charger_sections_classes' %}", {
+          annee_scolaire: annee,
+          section: section
+        })
+        .done(data => {
+          data.classes.forEach(classe => {
+            classeSelect.append(
+              `<option value="${classe.nom_classe}">${classe.nom_classe}</option>`
+            );
+          });
+
+          const savedData = JSON.parse(localStorage.getItem('searchData') || '{}');
+          if (savedData.classe) {
+            classeSelect.val(savedData.classe);
+          }
+        })
+        .fail(() => alert("Erreur lors du chargement des classes."));
+      }
+    });
+
+    if (savedSearch) {
+      const data = JSON.parse(savedSearch);
+      if (data.annee_scolaire) {
+        anneeSelect.trigger('change'); 
+      }
+    }
+
+    function lancerRechercheAjax() {
+      showLoader();
+
+      const query = $('#search-form').serialize();
+
+      $.get("{% url 'recherche' %}", query)
+        .done(data => {
+          if (data.html) {
+            resultsContainer.hide().html(data.html).fadeIn(300);
+          }
+        })
+        .fail(xhr => {
+          alert(xhr.responseJSON?.error || "Erreur inconnue lors de la recherche.");
+        })
+        .always(() => {
+          hideLoader();
+        });
+    }
+
+    $('#search-button').click(function () {
+      const formData = {
+        nom: $('#nom').val(),
+        post_nom: $('#post_nom').val(),
+        prenom: $('#prenom').val(),
+        annee_scolaire: $('#annee_scolaire').val(),
+        section: $('#section').val(),
+        classe: $('#classe').val()
+      };
+      localStorage.setItem('searchData', JSON.stringify(formData));
+
+      lancerRechercheAjax();
+    });
+
+    $('#reset-button').click(function () {
+      localStorage.removeItem('searchData');
+
+      $('#search-form')[0].reset();
+      sectionSelect.empty().append('<option value="">Sélectionner une section</option>').prop('disabled', true);
+      classeSelect.empty().append('<option value="">Sélectionner une classe</option>').prop('disabled', true);
+
+      resultsContainer.html('');
+    });
+
+    $(document).on('click', '.page-link', function(e) {
+      e.preventDefault();
+      const page = $(this).data('page');
+
+      const queryData = $('#search-form').serializeArray();
+      queryData.push({ name: 'page', value: page });
+
+      showLoader();
+
+      $.get("{% url 'recherche' %}", $.param(queryData))
+        .done(data => {
+          if (data.html) {
+            resultsContainer.hide().html(data.html).fadeIn(300);
+          }
+        })
+        .fail(xhr => {
+          alert(xhr.responseJSON?.error || "Erreur lors du changement de page.");
+        })
+        .always(() => {
+          hideLoader();
+        });
+    });
+    if (savedSearch) {
+      const data = JSON.parse(savedSearch);
+      const hasAnyParam = data.nom || data.post_nom || data.prenom || data.annee_scolaire || data.section || data.classe;
+      if (hasAnyParam) {
+        setTimeout(() => {
+          lancerRechercheAjax();
+        }, 500);
+      }
+    }
+  });
+  </script>
+</body>
+</html>

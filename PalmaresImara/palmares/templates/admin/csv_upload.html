@@ -1,0 +1,24 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+    <h1>Résultats</h1>
+    <p>
+        <strong>Importer un fichier CSV ou Excel :</strong>
+    </p>
+    <form method="post" enctype="multipart/form-data" action="import-csv/">
+        {% csrf_token %}
+        <input type="file" name="file" accept=".csv, .xlsx">
+        <button type="submit" class="button">Importer</button>
+    </form>
+    <p>
+        <small>
+            Formats acceptés : <strong>CSV</strong> (séparateur virgule ou point-virgule) ou <strong>Excel (.xlsx)</strong>.
+            Assurez-vous que les colonnes respectent les noms suivants : 
+            <code>Nom, Postnom, Prénom, Pourcentage, Classe, Section, Année scolaire</code>.
+        </small>
+    </p>
+    <p>
+        <a href="../">Retour à la liste</a>
+    </p>
+    {{ block.super }}
+{% endblock %}

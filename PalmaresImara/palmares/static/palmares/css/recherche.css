@@ -1,0 +1,314 @@
+    /*******************************************************
+     *               STRUCTURE GÉNÉRALE
+     *******************************************************/
+    /* 
+      Par défaut, on interdit le scroll. 
+      On occupe toute la hauteur en PC.
+      On mettra une media query en dessous de 900px pour rétablir le scroll.
+    */
+    html, body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        background-color: #f7f8fc;
+        color: #333;
+        height: 100%;
+        overflow: hidden; /* Pas de scroll par défaut */
+      }
+  
+      /*******************************************************
+       *                     NAVBAR
+       *******************************************************/
+      .header {
+        background-color: #168aad;  
+        /* Hauteur un peu réduite pour la navbar */
+        padding: 15px 40px;        
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .logo-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo-title img {
+        height: 50px;
+        width: 50px;
+        object-fit: contain;
+      }
+      .logo-title h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+        color: #fff;
+      }
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #fff;
+      }
+      .user-info i {
+        font-size: 18px;
+      }
+  
+      /*******************************************************
+       *          CONTENEUR PRINCIPAL (SOUS NAVBAR)
+       *******************************************************/
+      /* 
+        .main-container occupe l'espace restant en hauteur,
+        en soustrayant ~60px (la navbar) si c'est à peu près sa hauteur.
+        Ajuste si besoin. 
+      */
+      .main-container {
+        width: 100%;
+        height: calc(100% - 60px);
+        /* Petit espace en haut et bas si tu veux, sinon retire */
+        padding-top: 10px;
+        padding-bottom: 10px;
+        box-sizing: border-box; 
+      }
+  
+      /* Le rectangle de recherche et résultats */
+      .inner-container {
+        background: #fff;
+        /* On lui donne 95% de la largeur, centré */
+        width: 95%;
+        margin: 0 auto;
+        border: 1px solid #ddd;
+        border-radius: 10px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+        display: flex;
+        /* On ajuste la hauteur pour qu'il remplisse l'espace vertical restant */
+        height: 100%;
+        overflow: hidden; 
+      }
+  
+      /*******************************************************
+       *                SECTION « RECHERCHE »
+       *******************************************************/
+      .menu-recherche {
+        flex: 0.7; 
+        padding: 20px;
+        border-right: 1px solid #ddd;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .menu-recherche h2 {
+        text-align: center;
+        font-weight: bold;
+        font-size: 20px;
+        margin: 0;
+        margin-bottom: 25px;
+        /* Petite animation d’apparition (fade + slide) */
+        opacity: 0;
+        transform: translateY(-10px);
+        animation: fadeSlideIn 0.4s forwards ease-in-out;
+      }
+      @keyframes fadeSlideIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .menu-recherche form {
+        display: flex;
+        flex-direction: column;
+        gap: 5px; 
+        width: 100%;
+        align-items: center; 
+      }
+      .menu-recherche label {
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 0;
+        align-self: flex-start;
+        margin-left: 15%;
+      }
+      .menu-recherche input,
+      .menu-recherche select {
+        width: 70%;
+        padding: 6px;
+        border: 1px solid #999;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+  
+      /*******************************************************
+       *                    BOUTONS
+       *******************************************************/
+      .buttons-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        margin-top: 15px;
+      }
+      .btn {
+        color: #fff;
+        padding: 8px 20px;
+        border: 1px solid transparent; 
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .btn-search {
+        background-color: #168aad;
+      }
+      .btn-reset {
+        background-color: #ad2831;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      }
+  
+  
+  
+      /*******************************************************
+       *                 SECTION « RÉSULTATS »
+       *******************************************************/
+      #results-container {
+        flex: 2.3;
+        padding: 20px;
+      }
+      .resultats-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .resultats-table thead th {
+        background-color: #adb5bd; 
+      }
+      .resultats-table th,
+      .resultats-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+  
+      /* Pagination */
+      .pagination {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .page-link {
+        text-decoration: none;
+        color: #168aad;
+        padding: 5px 10px;
+        margin: 0 5px;
+        border: 1px solid #168aad;
+        border-radius: 4px;
+        transition: background-color 0.2s, color 0.2s;
+      }
+      .page-link:hover {
+        background-color: #168aad;
+        color: #fff;
+      }
+      .current {
+        margin: 0 10px;
+      }
+  
+      /*******************************************************
+       *     RESPONSIVE : POUR LES PETITS ÉCRANS (< 900px)
+       *     => on autorise le scroll pour l’utilisateur
+       *******************************************************/
+      @media screen and (max-width: 900px) {
+        html, body {
+          /* Permettre le scroll vertical sur mobile */
+          overflow: auto;
+          height: auto;
+        }
+        .main-container {
+          height: auto; /* Laisse grandir la page */
+          padding-bottom: 20px; 
+        }
+        .inner-container {
+          flex-direction: column; 
+          height: auto; /* Ne force plus la hauteur */
+        }
+        .menu-recherche {
+          border-right: none;     
+          border-bottom: 1px solid #ddd;
+          width: 100%;            
+          flex: none;             
+        }
+        #results-container {
+          width: 100%;
+          flex: none;             
+          overflow-x: auto;       
+        }
+        .menu-recherche {
+          padding: 15px;
+        }
+      }
+  
+      @media screen and (max-width: 600px) {
+        .logo-title h1 {
+          font-size: 18px; 
+        }
+        .menu-recherche h2 {
+          font-size: 18px;
+        }
+        .menu-recherche label, 
+        .menu-recherche input,
+        .menu-recherche select {
+          font-size: 13px;
+        }
+        .btn {
+          font-size: 13px;
+          padding: 6px 15px;
+        }
+      }
+      /* Styles de base pour les champs input et select */
+  .menu-recherche input,
+  .menu-recherche select {
+    width: 70%;
+    padding: 10px; /* Assure une hauteur uniforme */
+    border: 1px solid #999;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    box-sizing: border-box; /* Inclure padding et bordure dans les dimensions */
+    appearance: none; /* Supprime l'apparence native du navigateur */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; /* Animation fluide */
+    opacity: 0; /* Initialement invisible */
+    transform: translateY(10px); /* Décalé vers le bas */
+    animation: fadeIn 0.6s ease forwards; /* Animation à l'apparition */
+  }
+  
+  /* Animation d'apparition */
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Icône personnalisée pour le menu déroulant */
+  .menu-recherche select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    padding-right: 30px; /* Espace pour l'icône */
+  }
+  
+  /* Effet au survol (hover) et au focus */
+  .menu-recherche input:hover,
+  .menu-recherche select:hover,
+  .menu-recherche input:focus,
+  .menu-recherche select:focus {
+    border-color: #168aad; /* Change la couleur de la bordure */
+    box-shadow: 0 0 8px rgba(22, 138, 173, 0.5); /* Ajoute une ombre douce */
+    transform: translateY(-2px); /* Légère élévation */
+  }
+  
+  /* Effet sur la flèche du menu déroulant au focus */
+  .menu-recherche select:focus {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23168aad' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'%3E%3C/polyline%3E%3C/svg%3E");
+  }
+  
