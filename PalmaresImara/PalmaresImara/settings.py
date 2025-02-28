@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-6ezzmxt_hvj&b^zc8y*=f(&05@0#h@7uhxgja%@dxa_w=6z9m)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["palmares.aedbimarasfs.org", "www.palmares.aedbimarasfs.org", " 147.93.55.198", "localhost"]
 
 
 # Application definition
@@ -77,13 +77,13 @@ WSGI_APPLICATION = 'PalmaresImara.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Palmares-Imara',                 # Nom de la base de données
-        'USER': 'Palmares-Imara_owner',           # Nom d'utilisateur
-        'PASSWORD': 'G9KDtRV8NEcx',               # Mot de passe
-        'HOST': 'ep-crimson-violet-a5b4wd2p-pooler.us-east-2.aws.neon.tech',  # Hôte
-        'PORT': '5432',                           # Port par défaut pour PostgreSQL
+        'NAME': 'Palmares-Imara',                 
+        'USER': 'Palmares-Imara_owner',           
+        'PASSWORD': 'G9KDtRV8NEcx',               
+        'HOST': 'ep-crimson-violet-a5b4wd2p-pooler.us-east-2.aws.neon.tech',  
+        'PORT': '5432',                           
         'OPTIONS': {
-            'sslmode': 'require',                 # SSL activé pour NeonDB
+            'sslmode': 'require',               
         },
     }
 }
