@@ -21,6 +21,7 @@ from palmares import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('palmares/', include("palmares.urls")),
-    path('login/', views.login_view, name='login'),  
+    path('login/', views.login_view, name='login'),
+    path("", views.recherche, name='recherche'),
     
 ]
